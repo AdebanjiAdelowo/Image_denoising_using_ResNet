@@ -1,6 +1,6 @@
 # Image Denoising with ResNet
 
-Grayscale image denoising on the [LFW (Labelled Faces in the Wild)](https://www.tensorflow.org/datasets/catalog/lfw) dataset using residual convolutional networks in TensorFlow/Keras. Two notebooks are provided — a baseline and an enhanced version with channel attention, blind denoising, and a perceptual loss function.
+Grayscale image denoising on the [LFW (Labelled Faces in the Wild)](https://www.tensorflow.org/datasets/catalog/lfw) dataset using residual convolutional networks in TensorFlow/Keras. Two notebooks are provided: a baseline and an enhanced version with channel attention, blind denoising, and a perceptual loss function.
 
 [![Open Baseline In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/AdebanjiAdelowo/Image_denoising_using_ResNet/blob/main/final_image_denoising.ipynb)
 &nbsp;
@@ -10,11 +10,11 @@ Grayscale image denoising on the [LFW (Labelled Faces in the Wild)](https://www.
 
 ## Notebooks
 
-### `final_image_denoising.ipynb` — Baseline ResNet
+### `final_image_denoising.ipynb`: Baseline ResNet
 Straightforward residual network trained end-to-end on full 250×250 images with fixed Gaussian noise (σ = 0.09).
 
-### `resnet_enhanced_denoiser.ipynb` — Enhanced ResNet with Channel Attention
-Significant architectural and training improvements designed for higher PSNR/SSIM.
+### `resnet_enhanced_denoiser.ipynb`: Enhanced ResNet with Channel Attention
+Architectural and training changes (patch-based training, channel attention, blind denoising, SSIM+L1 loss) aimed at improving PSNR/SSIM over the baseline.
 
 ---
 
@@ -58,15 +58,17 @@ The **Squeeze-and-Excitation** sub-block learns to re-weight each feature channe
 
 ## Results
 
-Evaluated on 1 000 held-out LFW test images (250×250, σ = 0.09 Gaussian noise).
+Measured on the held-out LFW test split (Gaussian noise, σ = 0.09), as reported by the model comparison cell in `resnet_enhanced_denoiser.ipynb`:
 
 | Model | PSNR (dB) | SSIM |
 |---|---|---|
-| Noisy input | ~20.9 | ~0.72 |
-| Baseline ResNet (5 blocks, MSE) | ~24–25 | ~0.86 |
-| Enhanced ResNet (8 RCAB, SSIM+L1) | ~26–28 | ~0.91 |
+| Noisy input | 21.42 | 0.344 |
+| Baseline ResNet (5 blocks, MSE) | 28.32 | 0.724 |
+| Enhanced ResNet (8 RCAB, SSIM+L1) | 33.71 | 0.918 |
 
-*Exact numbers depend on random seed and early stopping epoch; run the notebooks to reproduce.*
+Exact numbers depend on random seed and early stopping epoch; run the notebooks to reproduce.
+
+The enhanced model was also evaluated zero-shot on salt-and-pepper noise (frequency 0.05) despite being trained only on Gaussian noise. PSNR improved from 17.75 dB to 22.56 dB and SSIM from 0.370 to 0.543, a smaller gain than for the in-distribution Gaussian case, indicating limited but nonzero robustness to an unseen noise type.
 
 ---
 
@@ -92,7 +94,7 @@ pip install tensorflow tensorflow-datasets scikit-image matplotlib
 
 ## How to Run
 
-### Colab (recommended — free GPU)
+### Colab (recommended: free GPU)
 
 1. Click the **Open in Colab** badge above for the notebook you want.
 2. **Runtime → Change runtime type → T4 GPU**.
@@ -126,11 +128,11 @@ Saved models (`best_denoiser.keras`, `enhanced_denoiser_resnet.keras`) and outpu
 
 ## References
 
-- He et al. (2016) — *Deep Residual Learning for Image Recognition*, CVPR
-- Zhang et al. (2017) — *Beyond a Gaussian Denoiser: Residual Learning of Deep CNN for Image Denoising*, TIP
-- Hu et al. (2018) — *Squeeze-and-Excitation Networks*, CVPR
-- Zhang et al. (2018) — *Image Super-Resolution Using Very Deep Residual Channel Attention Networks (RCAN)*, ECCV
-- LFW Dataset — [tensorflow.org/datasets/catalog/lfw](https://www.tensorflow.org/datasets/catalog/lfw)
+- He et al. (2016), *Deep Residual Learning for Image Recognition*, CVPR
+- Zhang et al. (2017), *Beyond a Gaussian Denoiser: Residual Learning of Deep CNN for Image Denoising*, TIP
+- Hu et al. (2018), *Squeeze-and-Excitation Networks*, CVPR
+- Zhang et al. (2018), *Image Super-Resolution Using Very Deep Residual Channel Attention Networks (RCAN)*, ECCV
+- LFW Dataset: [tensorflow.org/datasets/catalog/lfw](https://www.tensorflow.org/datasets/catalog/lfw)
 
 ---
 
